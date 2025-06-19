@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ContactFormFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: contactFormAPI.handler
+      Runtime: nodejs18.x
+      CodeUri: lambda/
+      Environment:
+        Variables:
+          TABLE_NAME: ContactSubmissions
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: post
+
+  ContactSubmissions:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ContactSubmissions
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+Add CloudFormation template for contact form stack
